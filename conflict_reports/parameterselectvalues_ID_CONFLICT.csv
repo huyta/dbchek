@@ -1,0 +1,28 @@
+Id,Name_220,ParameterId_220,Code_220,Name_107,ParameterId_107,Code_107,conflict_type
+716,Reticulocytosis. Corrected retic : %,456,P6,High RBC count.,456,P8,BLOCKER_ID_CONFLICT
+719,Poor retic response,456,RR,Poor retic response,456,P6,BLOCKER_ID_CONFLICT
+731,Mild anisopoikilocytosis,762,R4,Mild/ moderate/severe anisopoikilocytosis,762,R6,BLOCKER_ID_CONFLICT
+734,Moderate to severe anisopoikilocytosis,762,R5,Anisochromasia,762,R7,BLOCKER_ID_CONFLICT
+737,Macrocytic cells,762,R6,Macrocytic cells,762,R5,BLOCKER_ID_CONFLICT
+740,Polychromasia,762,R7,Polychromasia,762,R19,BLOCKER_ID_CONFLICT
+743,Nucleated RBC,762,R8,Nucleated RBC,762,R20,BLOCKER_ID_CONFLICT
+746,Spherocytosis,762,R9,Spherocyte,762,R17,BLOCKER_ID_CONFLICT
+749,Ovalostomatocytosis,762,R10,Knizocytes,762,R16,BLOCKER_ID_CONFLICT
+752,Rouleaux formation,762,R11,Rouleaux formation,762,R21,BLOCKER_ID_CONFLICT
+755,Pencil cells,762,R12,Target cells,762,R10,BLOCKER_ID_CONFLICT
+758,Target cells,762,R13,Irregularly contracted cells,762,R12,BLOCKER_ID_CONFLICT
+761,Pencil cells and target cells,762,R14,Basophilic stippling,762,R14,BLOCKER_ID_CONFLICT
+764,Elliptocytes,762,R15,Elliptocytes and ovalocytes,762,R8,BLOCKER_ID_CONFLICT
+767,"""Dimorphic picture with underlying 
+ hypochromic microcytic cells.""",762,R16,"Dimorphic picture with underlying 
+ hypochromic microcytic cells.",762,R4,BLOCKER_ID_CONFLICT
+770,Basophilic stippling,762,R17,Macro-ovalocytes and stomatocytes,762,R15,BLOCKER_ID_CONFLICT
+776,Red cells agglutination,762,R19,Pencil cells,762,R9,BLOCKER_ID_CONFLICT
+779,Echinocytes,762,R20,Echinocytes / Acanthocytes,762,R13,BLOCKER_ID_CONFLICT
+1167,Mild left shift,459,W14,Left shift maturation,459,W14,BLOCKER_ID_CONFLICT
+2485,Mild anisopoikilocytosis,458,R7,Mild/moderate/severe anisopoikilocytosis,458,R6,BLOCKER_ID_CONFLICT
+2486,Moderate to severe anisopoikilocytosis,458,R8,Elliptocytes and ovalocytes,458,R8,BLOCKER_ID_CONFLICT
+2489,Nucleated RBC,458,R18,Nucleated RBC,458,R20,BLOCKER_ID_CONFLICT
+2491,Ovalostomatocytosis,458,R6,Macro-ovalocytes and stomatocytes,458,R15,BLOCKER_ID_CONFLICT
+2492,Rouleaux formation,458,R19,Rouleaux formation,458,R21,BLOCKER_ID_CONFLICT
+2496,Elliptocytes and pencil cells.,458,R9,Pencil cells.,458,R9,BLOCKER_ID_CONFLICT

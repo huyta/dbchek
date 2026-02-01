@@ -1,0 +1,11 @@
+table_name,staging_row_count,prod_row_count,id_conflict_count,business_duplicate_count,staging_only_count,status
+catalogitems,1798,1722,8,0,86,NO_GO
+catalogitemprocessors,1852,1767,6,745,374,NO_GO
+catalogitemmappings,125,125,0,2,0,GO
+catalogitemmachinemaps,1655,1659,0,10,0,GO
+catalogitemparameters,3982,3946,13,145,48,NO_GO
+parameters,1516,1523,0,0,0,GO
+parameterreferences,1968,1968,0,2,0,GO
+parameterselectvalues,2243,2254,25,2,26,NO_GO
+testhierarchysearchs,0,0,0,0,0,GO
+processors,81,68,1,2,14,NO_GO

@@ -1,0 +1,28 @@
+Id,Name,ParameterId,Code
+716,Reticulocytosis. Corrected retic : %,456,P6
+719,Poor retic response,456,RR
+731,Mild anisopoikilocytosis,762,R4
+734,Moderate to severe anisopoikilocytosis,762,R5
+737,Macrocytic cells,762,R6
+740,Polychromasia,762,R7
+743,Nucleated RBC,762,R8
+746,Spherocytosis,762,R9
+749,Ovalostomatocytosis,762,R10
+752,Rouleaux formation,762,R11
+755,Pencil cells,762,R12
+758,Target cells,762,R13
+761,Pencil cells and target cells,762,R14
+764,Elliptocytes,762,R15
+767,"""Dimorphic picture with underlying 
+ hypochromic microcytic cells.""",762,R16
+770,Basophilic stippling,762,R17
+776,Red cells agglutination,762,R19
+779,Echinocytes,762,R20
+1167,Mild left shift,459,W14
+2485,Mild anisopoikilocytosis,458,R7
+2486,Moderate to severe anisopoikilocytosis,458,R8
+2489,Nucleated RBC,458,R18
+2491,Ovalostomatocytosis,458,R6
+2492,Rouleaux formation,458,R19
+2496,Elliptocytes and pencil cells.,458,R9
+3278,No significant dysplastic changes.,459,W24

@@ -69,7 +69,7 @@ TABLE_CONFIG = {
         "pk": ["Id"],
         "business_cols": ["ParameterId", "Name", "Code"]
     },
-    "testhierarchysearch": {
+    "testhierarchysearchs": {
         "pk": ["Id"],
         "business_cols": ["CatalogItemId", "TestName", "DisciplineId", "PerformingLabId", "SectionId"]
     },

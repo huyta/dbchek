@@ -1,6 +1,6 @@
 venv/
 __pycache__/
 .env
-conflict_reports/
+#conflict_reports/
 .DS_Store
 *.pyc

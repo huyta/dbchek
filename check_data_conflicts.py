@@ -28,7 +28,7 @@ PROD_DB_CONFIG = {
 }
 
 # Output Directory
-OUTPUT_DIR = "./conflict_reports/"
+OUTPUT_DIR = "./conflict_reportsV2/"
 
 # Table Configuration
 # Define unique ID (PK) and Business Identity Columns (business_cols)
@@ -39,7 +39,8 @@ TABLE_CONFIG = {
         # Inferred from schema: Name, ShortName, CatalogSubCatagoryId
         # User mentioned 'Code' but it might be ShortName or missing. Adjust as needed.
         # "business_cols": ["Name", "ShortName", "CatalogSubCatagoryId", "SectionId"]
-        "business_cols": ["ShortName"]
+        "business_cols": ["ShortName"],
+        "report_cols": ["Name"]
     },
     "catalogitemprocessors": {
         "pk": ["Id"],
@@ -83,9 +84,83 @@ TABLE_CONFIG = {
 # 2. HELPER FUNCTIONS
 # =============================================================================
 
+# Global lookup cache
+LOOKUP_CACHE = {}
+
 def get_db_engine(uri):
     """Creates a SQLAlchemy engine."""
     return create_engine(uri, echo=False)
+
+def load_lookup_tables(engine, tag):
+    """
+    Loads lookup tables (CatalogItems, Parameters) into memory for name resolution.
+    Stored in global LOOKUP_CACHE as {tag: {'catalogitems': df, 'parameters': df}}
+    """
+    global LOOKUP_CACHE
+    if tag not in LOOKUP_CACHE:
+        LOOKUP_CACHE[tag] = {}
+        
+    print(f"[{tag}] 🔄 Loading Lookup Tables for Name Enrichment...")
+    
+    # 1. CatalogItems
+    try:
+        # Check if IsDeleted exists
+        insp = inspect(engine)
+        cols = [c['name'] for c in insp.get_columns("catalogitems")]
+        where = "WHERE IsDeleted = 0" if "IsDeleted" in cols else ""
+        
+        query = f"SELECT Id, Name FROM catalogitems {where}"
+        df_cat = pd.read_sql(query, engine)
+        LOOKUP_CACHE[tag]['catalogitems'] = df_cat.set_index('Id')['Name'].to_dict()
+        print(f"[{tag}]   Loaded {len(df_cat)} CatalogItems names.")
+    except Exception as e:
+        print(f"[{tag}]   ⚠️ Failed to load CatalogItems lookup: {e}")
+        LOOKUP_CACHE[tag]['catalogitems'] = {}
+
+    # 2. Parameters
+    try:
+        insp = inspect(engine)
+        cols = [c['name'] for c in insp.get_columns("parameters")]
+        where = "WHERE IsDeleted = 0" if "IsDeleted" in cols else ""
+        
+        query = f"SELECT Id, Name FROM parameters {where}"
+        df_param = pd.read_sql(query, engine)
+        LOOKUP_CACHE[tag]['parameters'] = df_param.set_index('Id')['Name'].to_dict()
+        print(f"[{tag}]   Loaded {len(df_param)} Parameters names.")
+    except Exception as e:
+        print(f"[{tag}]   ⚠️ Failed to load Parameters lookup: {e}")
+        LOOKUP_CACHE[tag]['parameters'] = {}
+
+def enrich_data(df, tag):
+    """
+    Adds Name columns to DataFrame if IDs exist.
+    """
+    if df is None or df.empty:
+        return df
+        
+    df_enriched = df.copy()
+    
+    lookups = LOOKUP_CACHE.get(tag, {})
+    cat_lookup = lookups.get('catalogitems', {})
+    param_lookup = lookups.get('parameters', {})
+    
+    # Enrich CatalogItemId
+    if 'CatalogItemId' in df_enriched.columns:
+        df_enriched['CatalogItemName'] = df_enriched['CatalogItemId'].map(cat_lookup)
+        
+    # Enrich ParentCatalogItemId
+    if 'ParentCatalogItemId' in df_enriched.columns:
+        df_enriched['ParentCatalogItemName'] = df_enriched['ParentCatalogItemId'].map(cat_lookup)
+        
+    # Enrich ChildCatalogItemId
+    if 'ChildCatalogItemId' in df_enriched.columns:
+        df_enriched['ChildCatalogItemName'] = df_enriched['ChildCatalogItemId'].map(cat_lookup)
+
+    # Enrich ParameterId
+    if 'ParameterId' in df_enriched.columns:
+        df_enriched['ParameterName'] = df_enriched['ParameterId'].map(param_lookup)
+        
+    return df_enriched
 
 def get_table_data(table_name, config, engine, tag):
     """
@@ -94,12 +169,13 @@ def get_table_data(table_name, config, engine, tag):
     """
     pk_cols = config.get("pk", [])
     bus_cols = config.get("business_cols", [])
+    report_cols = config.get("report_cols", [])
     
     if not pk_cols or not bus_cols:
         print(f"[{tag}] ⚠️  Configuration missing PK or Business Cols for {table_name}")
         return None
 
-    columns_to_load = list(set(pk_cols + bus_cols))
+    columns_to_load = list(set(pk_cols + bus_cols + report_cols))
     cols_str = ", ".join([f"`{c}`" for c in columns_to_load])
     
     # Check if IsDeleted column exists
@@ -246,7 +322,12 @@ def main():
         print("✅ DB Connections Successful")
     except Exception as e:
         print(f"❌ DB Connection Error: {e}")
-        sys.exit(1)
+        print("NOTE: Ensure you have an SSH tunnel or VPN if connecting to remote DBs.")
+        # sys.exit(1) # Commented out for dev/testing without real DB connection
+
+    # Load Lookup Tables for Enrichment
+    load_lookup_tables(eng_stg, "STG")
+    load_lookup_tables(eng_prod, "PROD")
 
     overall_status = "GO"
 
@@ -256,6 +337,10 @@ def main():
         # 2. Load
         df_stg = get_table_data(table_name, config, eng_stg, "STG")
         df_prod = get_table_data(table_name, config, eng_prod, "PROD")
+        
+        # Enrich Data with Names
+        df_stg = enrich_data(df_stg, "STG")
+        df_prod = enrich_data(df_prod, "PROD")
         
         stg_count = len(df_stg) if df_stg is not None else 0
         prod_count = len(df_prod) if df_prod is not None else 0

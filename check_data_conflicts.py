@@ -28,7 +28,7 @@ PROD_DB_CONFIG = {
 }
 
 # Output Directory
-OUTPUT_DIR = "./conflict_reportsV2/"
+OUTPUT_DIR = "./conflict_reportsV3/"
 
 # Table Configuration
 # Define unique ID (PK) and Business Identity Columns (business_cols)
